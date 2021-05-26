@@ -6,6 +6,7 @@ type Stack struct {
 	gorm.Model
 	Name        string
 	Icon        string
+	Description string
 	DeveloperID uint
 	Services    []Service
 	Networks    []NetworkDeclaration
