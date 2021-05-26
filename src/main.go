@@ -4,10 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/spacerouter/marketplace/config"
-	"github.com/spacerouter/marketplace/models"
 	"github.com/spacerouter/marketplace/server"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 	"log"
 	"os"
 )
@@ -15,39 +12,44 @@ import (
 func main() {
 	environment := flag.String("e", "dev", "")
 	flag.Usage = func() {
-		fmt.Println("Usage: server -e {mode}")
+		fmt.Println("Usage: server -e {mode} [COMMAND]")
+		fmt.Println("Command list (default: Server):")
+		fmt.Println("\tServer : launch server")
+		fmt.Println("\tImport : import docker compose")
+		fmt.Println("\tCreateDev : create new developer")
+
 		os.Exit(1)
 	}
 
 	flag.Parse()
 	config.Init(*environment)
 
-	// github.com/mattn/go-sqlite3
-	db, err := gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = db.AutoMigrate(&models.Developer{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = db.AutoMigrate(&models.Stack{})
+	db, err := connectDB()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = db.AutoMigrate(&models.Service{}, &models.VolumesDeclaration{}, &models.NetworkDeclaration{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = db.AutoMigrate(&models.Developer{}, &models.Volume{}, &models.EnvVar{}, models.Network{})
+	err = migrate(db)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = server.Init()
-	if err != nil {
-		log.Fatal(err)
-	}
+	switch flag.Arg(0) {
+	case "Import":
 
+		ImportCompose(flag.Arg(1), db)
+		return
+	case "Server":
+	case "":
+		err = server.Init(db)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return
+	case "CreateDev":
+		createDeveloper(db)
+	default:
+		fmt.Println("Invalid command")
+		os.Exit(1)
+	}
 }

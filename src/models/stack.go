@@ -5,29 +5,32 @@ import "gorm.io/gorm"
 type Stack struct {
 	gorm.Model
 	Name        string
+	Icon        string
 	DeveloperID uint
 	Services    []Service
 	Networks    []NetworkDeclaration
-	Volumes     []VolumesDeclaration
+	Volumes     []VolumeDeclaration
 }
 
 type Service struct {
 	gorm.Model
-	Image    string
-	Port     []Port
-	Envs     []EnvVar
-	Volumes  []Volume
-	Networks []Network
-	StackID  uint
+	Name         string
+	Image        string
+	ImageVersion string
+	Ports        []Port
+	Envs         []EnvVar
+	Volumes      []Volume
+	Networks     []Network
+	StackID      uint
 }
 
 type Port struct {
 	gorm.Model
-	Port      int
+	Port      uint
 	ServiceID uint
 }
 
-type VolumesDeclaration struct {
+type VolumeDeclaration struct {
 	gorm.Model
 	Name    string
 	StackID uint
