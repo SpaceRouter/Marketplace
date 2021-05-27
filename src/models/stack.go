@@ -3,7 +3,7 @@ package models
 import "gorm.io/gorm"
 
 type Stack struct {
-	gorm.Model
+	gorm.Model  `swaggerignore:"true"`
 	Name        string
 	Icon        string
 	Description string
@@ -14,7 +14,7 @@ type Stack struct {
 }
 
 type Service struct {
-	gorm.Model
+	gorm.Model   `swaggerignore:"true"`
 	Name         string
 	Image        string
 	ImageVersion string
@@ -26,39 +26,39 @@ type Service struct {
 }
 
 type Port struct {
-	gorm.Model
-	Port      uint
-	ServiceID uint
+	gorm.Model `swaggerignore:"true"`
+	Port       uint
+	ServiceID  uint
 }
 
 type VolumeDeclaration struct {
-	gorm.Model
-	Name    string
-	StackID uint
+	gorm.Model `swaggerignore:"true"`
+	Name       string
+	StackID    uint
 }
 
 type Volume struct {
-	gorm.Model
+	gorm.Model `swaggerignore:"true"`
 	Name       string
 	MountPoint string
 	ServiceID  uint
 }
 
 type EnvVar struct {
-	gorm.Model
+	gorm.Model   `swaggerignore:"true"`
 	Name         string
 	DefaultValue string
 	ServiceID    uint
 }
 
 type NetworkDeclaration struct {
-	gorm.Model
-	Name    string
-	StackID uint
+	gorm.Model `swaggerignore:"true"`
+	Name       string
+	StackID    uint
 }
 
 type Network struct {
-	gorm.Model
-	Name      string
-	ServiceID uint
+	gorm.Model `swaggerignore:"true"`
+	Name       string
+	ServiceID  uint
 }

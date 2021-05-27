@@ -15,6 +15,14 @@ type StackController struct {
 	DB *gorm.DB
 }
 
+// GetStackById godoc
+// @Summary Get stack by ID
+// @Description Get all stack information from stack ID
+// @ID get_stack_by_id
+// @Produce  json
+// @Success 200 {object} forms.StackResponse
+// @Failure 500,400,401 {object} forms.StackResponse
+// @Router /v1/stack/{id} [get]
 func (s *StackController) GetStackById(c *gin.Context) {
 	id := c.Param("id")
 	parseId, err := strconv.ParseUint(id, 10, 32)
@@ -28,7 +36,7 @@ func (s *StackController) GetStackById(c *gin.Context) {
 		return
 	}
 	var stack models.Stack
-	result := s.DB.Preload(clause.Associations).First(&stack, parseId)
+	result := s.DB.Preload(clause.Associations).Preload("Services."+clause.Associations).First(&stack, parseId)
 
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -60,6 +68,14 @@ func (s *StackController) GetStackById(c *gin.Context) {
 	})
 }
 
+// GetStackSearch godoc
+// @Summary Search for stacks by name
+// @Description Search for stacks reduced information by name
+// @ID get_stack_search
+// @Produce  json
+// @Success 200 {object} forms.StackSearchResponse
+// @Failure 500,400,401 {object} forms.StackSearchResponse
+// @Router /v1/search/name/{search} [get]
 func (s *StackController) GetStackSearch(c *gin.Context) {
 	search := c.Param("search")
 	var stacks []models.Stack
@@ -89,6 +105,14 @@ func (s *StackController) GetStackSearch(c *gin.Context) {
 	})
 }
 
+// GetStackByUserId godoc
+// @Summary Get stack by user ID
+// @Description Get all stacks information uploaded by a user
+// @ID get_stack_by_user_ID
+// @Produce  json
+// @Success 200 {object} forms.StackSearchResponse
+// @Failure 500,400,401 {object} forms.StackSearchResponse
+// @Router /v1/search/developer/{search} [get]
 func (s *StackController) GetStackByUserId(c *gin.Context) {
 	id := c.Param("id")
 	var stacks []models.Stack

@@ -3,7 +3,11 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/spacerouter/marketplace/controllers"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
+
+	_ "github.com/spacerouter/marketplace/docs"
 )
 
 func NewRouter(db *gorm.DB) *gin.Engine {
@@ -17,12 +21,14 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 
 	router.POST("/tea", controllers.GetTea)
 
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	v1 := router.Group("v1")
 	{
 		stack := controllers.StackController{
 			DB: db,
 		}
-		v1.GET("id/:id", stack.GetStackById)
+		v1.GET("stack/:id", stack.GetStackById)
 		v1.GET("search/name/:search", stack.GetStackSearch)
 		v1.GET("search/developer/:id", stack.GetStackByUserId)
 	}

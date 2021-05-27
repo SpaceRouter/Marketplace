@@ -9,6 +9,24 @@ import (
 	"os"
 )
 
+// @title SpaceRouter Marketplace
+// @version 0.1
+// @description
+
+// @contact.name ESIEESPACE Network
+// @contact.url http://esieespace.fr
+// @contact.email contact@esieespace.fr
+
+// @license.name GPL-3.0
+// @license.url https://github.com/SpaceRouter/authentication_server/blob/louis/LICENSE
+
+// @host localhost:8081
+// @BasePath /
+// @query.collection.format multi
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	environment := flag.String("e", "dev", "")
 	flag.Usage = func() {

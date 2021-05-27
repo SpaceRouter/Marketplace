@@ -3,7 +3,7 @@ package models
 import "gorm.io/gorm"
 
 type Developer struct {
-	gorm.Model
-	Name    string
-	Website string
+	gorm.Model `swaggerignore:"true"`
+	Name       string
+	Website    string
 }
