@@ -5,4 +5,4 @@ EXPOSE 8080
 
 WORKDIR /web
 
-CMD go get && go run main.go
+CMD go get && go run .

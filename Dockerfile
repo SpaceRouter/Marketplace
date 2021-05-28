@@ -1,9 +1,10 @@
 FROM golang
 
+RUN apt update && apt install libpam0g-dev -y
+
 COPY src /source
 WORKDIR /source
 
-RUN apt update && apt install libpam0g-dev -y
 RUN go get
 RUN go build -o /usr/bin/marketplace
 
@@ -13,4 +14,4 @@ WORKDIR /
 
 ENV GIN_MODE=release
 
-CMD marketplace
+CMD marketplace Server

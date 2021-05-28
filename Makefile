@@ -5,7 +5,7 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 .PHONY: docker
 docker:
-	@docker run -v "$(ROOT_DIR)/src":"/web" -p 8080:8080 --name "auth_server_dev" --rm ldesplanche/marketplace_dev
+	@docker run -v "$(ROOT_DIR)/src":"/web" -p 8080:8080 --name "marketplace_server_dev" --rm ldesplanche/marketplace_dev
 
 .PHONY: docker-dev-image
 docker-dev-image:

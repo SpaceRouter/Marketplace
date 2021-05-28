@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/viper"
 )
@@ -14,11 +15,17 @@ var config *viper.Viper
 func Init(env string) {
 	var err error
 	config = viper.New()
-	config.SetConfigType("yaml")
+
 	config.SetConfigName(env)
+
+	config.SetConfigType("yaml")
 	config.AddConfigPath("../config/")
 	config.AddConfigPath("config/")
 	config.AddConfigPath("src/config/")
+
+	config.AutomaticEnv()
+	config.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
 	err = config.ReadInConfig()
 	if err != nil {
 		log.Fatalf("error on parsing configuration file %s", err)

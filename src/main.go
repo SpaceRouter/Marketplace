@@ -57,8 +57,7 @@ func main() {
 
 		ImportCompose(flag.Arg(1), db)
 		return
-	case "Server":
-	case "":
+	case "Server", "":
 		err = server.Init(db)
 		if err != nil {
 			log.Fatal(err)
