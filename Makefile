@@ -3,13 +3,16 @@ VERSION=0.0.1
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
+RELEASE_PACKAGE:=ldesplanche/marketplace
+
 .PHONY: docker
 docker:
 	@docker run -v "$(ROOT_DIR)/src":"/web" -p 8080:8080 --name "marketplace_server_dev" --rm ldesplanche/marketplace_dev
 
-.PHONY: release:
+.PHONY: release
 release:
-	@docker build $(ROOT_DIR) -t ldesplanche/marketplace
+	@docker build $(ROOT_DIR) -t $(RELEASE_PACKAGE)
+	@docker push $(RELEASE_PACKAGE)
 
 .PHONY: docker-dev-image
 docker-dev-image:
