@@ -7,6 +7,10 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 docker:
 	@docker run -v "$(ROOT_DIR)/src":"/web" -p 8080:8080 --name "marketplace_server_dev" --rm ldesplanche/marketplace_dev
 
+.PHONY: release:
+release:
+	@docker build $(ROOT_DIR) -t ldesplanche/marketplace
+
 .PHONY: docker-dev-image
 docker-dev-image:
 	@docker build -t ldesplanche/marketplace_dev - < dev.Dockerfile

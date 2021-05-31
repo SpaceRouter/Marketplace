@@ -28,9 +28,12 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 		stack := controllers.StackController{
 			DB: db,
 		}
+		v1.GET("stacks/", stack.GetAllStacks)
+
 		v1.GET("stack/:id", stack.GetStackById)
-		v1.GET("search/name/:search", stack.GetStackSearch)
-		v1.GET("search/developer/:id", stack.GetStackByUserId)
+		v1.GET("developer/:id", stack.GetStackByUserId)
+
+		v1.GET("search/stack/*search", stack.GetStackSearch)
 	}
 
 	return router

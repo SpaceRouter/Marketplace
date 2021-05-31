@@ -75,7 +75,7 @@ func (s *StackController) GetStackById(c *gin.Context) {
 // @Produce  json
 // @Success 200 {object} forms.StackSearchResponse
 // @Failure 500,400,401 {object} forms.StackSearchResponse
-// @Router /v1/search/name/{search} [get]
+// @Router /v1/search/stack/{search} [get]
 func (s *StackController) GetStackSearch(c *gin.Context) {
 	search := c.Param("search")
 	var stacks []models.Stack
@@ -93,6 +93,44 @@ func (s *StackController) GetStackSearch(c *gin.Context) {
 	}
 
 	var stacksInfo []forms.StackInfo
+	stacksInfo = make([]forms.StackInfo, 0)
+
+	for _, stack := range stacks {
+		stacksInfo = append(stacksInfo, StackToInfo(stack, s.DB))
+	}
+
+	c.JSON(http.StatusOK, forms.StackSearchResponse{
+		Message: "",
+		Ok:      true,
+		Stacks:  stacksInfo,
+	})
+}
+
+// GetAllStacks godoc
+// @Summary Get all stacks
+// @Description Get all stacks
+// @ID get_all_stacks
+// @Produce  json
+// @Success 200 {object} forms.StackSearchResponse
+// @Failure 500,400,401 {object} forms.StackSearchResponse
+// @Router /v1/stacks [get]
+func (s *StackController) GetAllStacks(c *gin.Context) {
+	var stacks []models.Stack
+	result := s.DB.Find(&stacks)
+
+	if result.Error != nil {
+		if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, forms.StackSearchResponse{
+				Message: result.Error.Error(),
+				Ok:      false,
+				Stacks:  nil,
+			})
+			return
+		}
+	}
+
+	var stacksInfo []forms.StackInfo
+	stacksInfo = make([]forms.StackInfo, 0)
 
 	for _, stack := range stacks {
 		stacksInfo = append(stacksInfo, StackToInfo(stack, s.DB))
@@ -112,7 +150,7 @@ func (s *StackController) GetStackSearch(c *gin.Context) {
 // @Produce  json
 // @Success 200 {object} forms.StackSearchResponse
 // @Failure 500,400,401 {object} forms.StackSearchResponse
-// @Router /v1/search/developer/{search} [get]
+// @Router /v1/developer/{search} [get]
 func (s *StackController) GetStackByUserId(c *gin.Context) {
 	id := c.Param("id")
 	var stacks []models.Stack
@@ -130,6 +168,7 @@ func (s *StackController) GetStackByUserId(c *gin.Context) {
 	}
 
 	var stacksInfo []forms.StackInfo
+	stacksInfo = make([]forms.StackInfo, 0)
 
 	for _, stack := range stacks {
 		stacksInfo = append(stacksInfo, StackToInfo(stack, s.DB))
