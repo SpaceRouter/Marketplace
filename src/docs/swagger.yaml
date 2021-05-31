@@ -150,7 +150,7 @@ info:
   title: SpaceRouter Marketplace
   version: "0.1"
 paths:
-  /v1/search/developer/{search}:
+  /v1/developer/{search}:
     get:
       description: Get all stacks information uploaded by a user
       operationId: get_stack_by_user_ID
@@ -162,11 +162,11 @@ paths:
           schema:
             $ref: '#/definitions/forms.StackSearchResponse'
         "400":
-          description: Internal Server Error
+          description: Bad Request
           schema:
             $ref: '#/definitions/forms.StackSearchResponse'
         "401":
-          description: Internal Server Error
+          description: Unauthorized
           schema:
             $ref: '#/definitions/forms.StackSearchResponse'
         "500":
@@ -174,7 +174,7 @@ paths:
           schema:
             $ref: '#/definitions/forms.StackSearchResponse'
       summary: Get stack by user ID
-  /v1/search/name/{search}:
+  /v1/search/stack/{search}:
     get:
       description: Search for stacks reduced information by name
       operationId: get_stack_search
@@ -186,11 +186,11 @@ paths:
           schema:
             $ref: '#/definitions/forms.StackSearchResponse'
         "400":
-          description: Internal Server Error
+          description: Bad Request
           schema:
             $ref: '#/definitions/forms.StackSearchResponse'
         "401":
-          description: Internal Server Error
+          description: Unauthorized
           schema:
             $ref: '#/definitions/forms.StackSearchResponse'
         "500":
@@ -210,11 +210,11 @@ paths:
           schema:
             $ref: '#/definitions/forms.StackResponse'
         "400":
-          description: Internal Server Error
+          description: Bad Request
           schema:
             $ref: '#/definitions/forms.StackResponse'
         "401":
-          description: Internal Server Error
+          description: Unauthorized
           schema:
             $ref: '#/definitions/forms.StackResponse'
         "500":
@@ -222,6 +222,30 @@ paths:
           schema:
             $ref: '#/definitions/forms.StackResponse'
       summary: Get stack by ID
+  /v1/stacks:
+    get:
+      description: Get all stacks
+      operationId: get_all_stacks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/forms.StackSearchResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/forms.StackSearchResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/forms.StackSearchResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/forms.StackSearchResponse'
+      summary: Get all stacks
 securityDefinitions:
   ApiKeyAuth:
     in: header

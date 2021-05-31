@@ -16,7 +16,7 @@
     "host": "localhost:8081",
     "basePath": "/",
     "paths": {
-        "/v1/search/developer/{search}": {
+        "/v1/developer/{search}": {
             "get": {
                 "description": "Get all stacks information uploaded by a user",
                 "produces": [
@@ -32,13 +32,13 @@
                         }
                     },
                     "400": {
-                        "description": "Internal Server Error",
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/forms.StackSearchResponse"
                         }
                     },
                     "401": {
-                        "description": "Internal Server Error",
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/forms.StackSearchResponse"
                         }
@@ -52,7 +52,7 @@
                 }
             }
         },
-        "/v1/search/name/{search}": {
+        "/v1/search/stack/{search}": {
             "get": {
                 "description": "Search for stacks reduced information by name",
                 "produces": [
@@ -68,13 +68,13 @@
                         }
                     },
                     "400": {
-                        "description": "Internal Server Error",
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/forms.StackSearchResponse"
                         }
                     },
                     "401": {
-                        "description": "Internal Server Error",
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/forms.StackSearchResponse"
                         }
@@ -104,13 +104,13 @@
                         }
                     },
                     "400": {
-                        "description": "Internal Server Error",
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/forms.StackResponse"
                         }
                     },
                     "401": {
-                        "description": "Internal Server Error",
+                        "description": "Unauthorized",
                         "schema": {
                             "$ref": "#/definitions/forms.StackResponse"
                         }
@@ -119,6 +119,42 @@
                         "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/forms.StackResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/stacks": {
+            "get": {
+                "description": "Get all stacks",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get all stacks",
+                "operationId": "get_all_stacks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/forms.StackSearchResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/forms.StackSearchResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/forms.StackSearchResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/forms.StackSearchResponse"
                         }
                     }
                 }
