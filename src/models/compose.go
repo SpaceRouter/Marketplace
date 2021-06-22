@@ -1,9 +1,9 @@
 package models
 
 type Compose struct {
-	Services map[string]ComposeService
-	Volumes  map[string]ComposeVolumeDeclaration
-	Networks map[string]ComposeNetworkDeclaration
+	Services map[string]*ComposeService
+	Volumes  map[string]*ComposeVolumeDeclaration
+	Networks map[string]*ComposeNetworkDeclaration
 }
 
 type ComposeNetworkDeclaration struct {

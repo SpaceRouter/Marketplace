@@ -241,3 +241,45 @@ func (s *StackController) ImportCompose(c *gin.Context) {
 		Ok:      true,
 	})
 }
+
+func (s *StackController) FakeImport(c *gin.Context) {
+
+	composeFile, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, forms.BasicResponse{
+			Message: err.Error(),
+			Ok:      false,
+		})
+		return
+	}
+
+	compose := models.Compose{}
+
+	err = yaml.Unmarshal(composeFile, &compose)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, forms.BasicResponse{
+			Message: err.Error(),
+			Ok:      false,
+		})
+		return
+	}
+
+	stack, err := utils.ConvertToStack(compose)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, forms.BasicResponse{
+			Message: err.Error(),
+			Ok:      false,
+		})
+		return
+	}
+
+	stack.Name = c.Query("name")
+	stack.Description = c.Query("descr")
+	stack.Icon = c.Query("icon")
+
+	c.JSON(http.StatusOK, forms.StackResponse{
+		Message: "",
+		Ok:      true,
+		Stack:   stack,
+	})
+}

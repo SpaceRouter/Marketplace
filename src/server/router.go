@@ -36,6 +36,7 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 		v1.GET("search/stack/*search", stack.GetStackSearch)
 
 		v1.POST("/import", stack.ImportCompose)
+		v1.POST("/fake_import", stack.FakeImport)
 	}
 
 	return router
