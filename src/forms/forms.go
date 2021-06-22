@@ -2,6 +2,11 @@ package forms
 
 import "github.com/spacerouter/marketplace/models"
 
+type BasicResponse struct {
+	Message string
+	Ok      bool
+}
+
 type StackResponse struct {
 	Message   string
 	Ok        bool

@@ -5,8 +5,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spacerouter/marketplace/forms"
 	"github.com/spacerouter/marketplace/models"
+	"github.com/spacerouter/marketplace/utils"
+	"gopkg.in/yaml.v3"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 )
@@ -191,4 +194,47 @@ func StackToInfo(stack models.Stack, db *gorm.DB) forms.StackInfo {
 		Description: stack.Description,
 		Developer:   &developer,
 	}
+}
+
+func (s *StackController) ImportCompose(c *gin.Context) {
+
+	composeFile, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, forms.BasicResponse{
+			Message: err.Error(),
+			Ok:      false,
+		})
+		return
+	}
+
+	compose := models.Compose{}
+
+	err = yaml.Unmarshal(composeFile, &compose)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, forms.BasicResponse{
+			Message: err.Error(),
+			Ok:      false,
+		})
+		return
+	}
+
+	stack, err := utils.ConvertToStack(compose)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, forms.BasicResponse{
+			Message: err.Error(),
+			Ok:      false,
+		})
+		return
+	}
+
+	stack.Name = c.Query("name")
+	stack.Description = c.Query("descr")
+	stack.Icon = c.Query("icon")
+
+	s.DB.Create(stack)
+
+	c.JSON(http.StatusOK, forms.BasicResponse{
+		Message: "",
+		Ok:      true,
+	})
 }
