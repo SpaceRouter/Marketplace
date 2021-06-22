@@ -82,7 +82,7 @@ func (s *StackController) GetStackById(c *gin.Context) {
 func (s *StackController) GetStackSearch(c *gin.Context) {
 	search := c.Param("search")
 	var stacks []models.Stack
-	result := s.DB.Where("name LIKE ", "%"+search+"%").Find(&stacks)
+	result := s.DB.Where("name LIKE ?", "%"+search+"%").Find(&stacks)
 
 	if result.Error != nil {
 		if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
