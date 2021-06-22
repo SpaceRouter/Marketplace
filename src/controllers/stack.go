@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spacerouter/marketplace/forms"
 	"github.com/spacerouter/marketplace/models"
@@ -12,6 +13,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 type StackController struct {
@@ -80,9 +82,10 @@ func (s *StackController) GetStackById(c *gin.Context) {
 // @Failure 500,400,401 {object} forms.StackSearchResponse
 // @Router /v1/search/stack/{search} [get]
 func (s *StackController) GetStackSearch(c *gin.Context) {
-	search := c.Param("search")
+	search := strings.TrimSuffix(c.Param("search"), "/")
+
 	var stacks []models.Stack
-	result := s.DB.Where("name LIKE ", "%"+search+"%").Find(&stacks)
+	result := s.DB.Where("name LIKE ?", "%"+search+"%").Find(&stacks)
 
 	if result.Error != nil {
 		if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -103,7 +106,7 @@ func (s *StackController) GetStackSearch(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, forms.StackSearchResponse{
-		Message: "",
+		Message: fmt.Sprintf("%d stacks found", len(stacks)),
 		Ok:      true,
 		Stacks:  stacksInfo,
 	})

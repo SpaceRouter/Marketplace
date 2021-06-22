@@ -1,4 +1,4 @@
-NAME=Authentication_Server
+NAME=Marketplace
 VERSION=0.0.1
 
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
