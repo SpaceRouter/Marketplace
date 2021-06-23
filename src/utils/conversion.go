@@ -110,9 +110,9 @@ func convertToPorts(ports []string) ([]models.Port, error) {
 	return returnPorts, nil
 }
 
-func convertToEnvs(ports map[string]string) ([]models.EnvVar, error) {
+func convertToEnvs(envs map[string]string) ([]models.EnvVar, error) {
 	var returnEnvs []models.EnvVar
-	for name, value := range ports {
+	for name, value := range envs {
 		returnEnvs = append(returnEnvs, models.EnvVar{
 			Name:         name,
 			DefaultValue: value,
@@ -129,7 +129,7 @@ func convertToVolumes(ports []string) ([]models.Volume, error) {
 
 		returnVolumes = append(returnVolumes, models.Volume{
 			Name:       parts[0],
-			MountPoint: parts[0],
+			MountPoint: parts[1],
 		})
 	}
 
