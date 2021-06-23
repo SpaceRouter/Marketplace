@@ -31,6 +31,7 @@ func NewRouter(db *gorm.DB) *gin.Engine {
 		v1.GET("stacks/", stack.GetAllStacks)
 
 		v1.GET("stack/:id", stack.GetStackById)
+		v1.GET("stack_by_name/:name", stack.GetStackByName)
 		v1.GET("developer/:id", stack.GetStackByUserId)
 
 		v1.GET("search/stack/*search", stack.GetStackSearch)

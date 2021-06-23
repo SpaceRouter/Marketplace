@@ -222,6 +222,30 @@ paths:
           schema:
             $ref: '#/definitions/forms.StackResponse'
       summary: Get stack by ID
+  /v1/stack_by_name/{name}:
+    get:
+      description: Get all stack information from stack name
+      operationId: get_stack_by_name
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/forms.StackResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/forms.StackResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/forms.StackResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/forms.StackResponse'
+      summary: Get stack by Name
   /v1/stacks:
     get:
       description: Get all stacks

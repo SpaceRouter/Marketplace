@@ -73,6 +73,50 @@ func (s *StackController) GetStackById(c *gin.Context) {
 	})
 }
 
+// GetStackByName godoc
+// @Summary Get stack by Name
+// @Description Get all stack information from stack name
+// @ID get_stack_by_name
+// @Produce  json
+// @Success 200 {object} forms.StackResponse
+// @Failure 500,400,401 {object} forms.StackResponse
+// @Router /v1/stack_by_name/{name} [get]
+func (s *StackController) GetStackByName(c *gin.Context) {
+	name := c.Param("name")
+
+	var stack models.Stack
+	result := s.DB.Preload(clause.Associations).Preload("Services."+clause.Associations).First(&stack, "name = ?", name)
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			c.AbortWithStatusJSON(http.StatusNotFound, forms.StackResponse{
+				Message:   result.Error.Error(),
+				Ok:        false,
+				Stack:     nil,
+				Developer: nil,
+			})
+			return
+		} else {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, forms.StackResponse{
+				Message:   result.Error.Error(),
+				Ok:        false,
+				Stack:     nil,
+				Developer: nil,
+			})
+			return
+		}
+	}
+	developer := models.Developer{}
+	s.DB.First(&developer, map[string]interface{}{"ID": stack.ID})
+
+	c.JSON(http.StatusOK, forms.StackResponse{
+		Message:   "",
+		Ok:        true,
+		Stack:     &stack,
+		Developer: &developer,
+	})
+}
+
 // GetStackSearch godoc
 // @Summary Search for stacks by name
 // @Description Search for stacks reduced information by name

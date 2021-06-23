@@ -139,6 +139,42 @@ var doc = `{
                 }
             }
         },
+        "/v1/stack_by_name/{name}": {
+            "get": {
+                "description": "Get all stack information from stack name",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get stack by Name",
+                "operationId": "get_stack_by_name",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/forms.StackResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/forms.StackResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/forms.StackResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/forms.StackResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/v1/stacks": {
             "get": {
                 "description": "Get all stacks",
