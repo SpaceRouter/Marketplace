@@ -34,6 +34,7 @@ func main() {
 		fmt.Println("Command list (default: Server):")
 		fmt.Println("\tServer : launch server")
 		fmt.Println("\tImport : import docker compose")
+		fmt.Println("\tRemove : remove docker compose")
 		fmt.Println("\tCreateDev : create new developer")
 
 		os.Exit(1)
@@ -54,8 +55,10 @@ func main() {
 
 	switch flag.Arg(0) {
 	case "Import":
-
 		ImportCompose(flag.Arg(1), db)
+		return
+	case "Remove":
+		RemoveStack(flag.Arg(1), db)
 		return
 	case "Server", "":
 		err = server.Init(db)

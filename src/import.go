@@ -57,3 +57,7 @@ func ImportCompose(path string, db *gorm.DB) {
 
 	db.Create(stack)
 }
+
+func RemoveStack(id string, db *gorm.DB) {
+	db.Delete(&models.Stack{}, id)
+}
