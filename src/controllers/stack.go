@@ -82,7 +82,7 @@ func (s *StackController) GetStackById(c *gin.Context) {
 // @Failure 500,400,401 {object} forms.StackSearchResponse
 // @Router /v1/search/stack/{search} [get]
 func (s *StackController) GetStackSearch(c *gin.Context) {
-	search := strings.TrimSuffix(c.Param("search"), "/")
+	search := strings.TrimPrefix(c.Param("search"), "/")
 
 	var stacks []models.Stack
 	result := s.DB.Where("name LIKE ?", "%"+search+"%").Find(&stacks)
@@ -143,7 +143,7 @@ func (s *StackController) GetAllStacks(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, forms.StackSearchResponse{
-		Message: "",
+		Message: fmt.Sprintf("%d stacks found", len(stacks)),
 		Ok:      true,
 		Stacks:  stacksInfo,
 	})
