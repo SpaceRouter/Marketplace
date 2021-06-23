@@ -28,7 +28,7 @@ func ConvertToStack(compose models.Compose) (*models.Stack, error) {
 	}, nil
 }
 
-func convertToNetworkDeclarations(networks map[string]models.ComposeNetworkDeclaration) ([]models.NetworkDeclaration, error) {
+func convertToNetworkDeclarations(networks map[string]*models.ComposeNetworkDeclaration) ([]models.NetworkDeclaration, error) {
 	var returnNetworks []models.NetworkDeclaration
 	for name, _ := range networks {
 		returnNetworks = append(returnNetworks, models.NetworkDeclaration{
@@ -39,7 +39,7 @@ func convertToNetworkDeclarations(networks map[string]models.ComposeNetworkDecla
 	return returnNetworks, nil
 }
 
-func convertToVolumeDeclarations(networks map[string]models.ComposeVolumeDeclaration) ([]models.VolumeDeclaration, error) {
+func convertToVolumeDeclarations(networks map[string]*models.ComposeVolumeDeclaration) ([]models.VolumeDeclaration, error) {
 	var returnVolumes []models.VolumeDeclaration
 	for name, _ := range networks {
 		returnVolumes = append(returnVolumes, models.VolumeDeclaration{
@@ -50,7 +50,7 @@ func convertToVolumeDeclarations(networks map[string]models.ComposeVolumeDeclara
 	return returnVolumes, nil
 }
 
-func convertToServices(services map[string]models.ComposeService) ([]models.Service, error) {
+func convertToServices(services map[string]*models.ComposeService) ([]models.Service, error) {
 	var returnService []models.Service
 	for name, service := range services {
 		ports, err := convertToPorts(service.Ports)

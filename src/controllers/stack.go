@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spacerouter/marketplace/forms"
 	"github.com/spacerouter/marketplace/models"
@@ -12,6 +13,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 type StackController struct {
@@ -80,7 +82,8 @@ func (s *StackController) GetStackById(c *gin.Context) {
 // @Failure 500,400,401 {object} forms.StackSearchResponse
 // @Router /v1/search/stack/{search} [get]
 func (s *StackController) GetStackSearch(c *gin.Context) {
-	search := c.Param("search")
+	search := strings.TrimSuffix(c.Param("search"), "/")
+
 	var stacks []models.Stack
 	result := s.DB.Where("name LIKE ?", "%"+search+"%").Find(&stacks)
 
@@ -103,7 +106,7 @@ func (s *StackController) GetStackSearch(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, forms.StackSearchResponse{
-		Message: "",
+		Message: fmt.Sprintf("%d stacks found", len(stacks)),
 		Ok:      true,
 		Stacks:  stacksInfo,
 	})
@@ -236,5 +239,47 @@ func (s *StackController) ImportCompose(c *gin.Context) {
 	c.JSON(http.StatusOK, forms.BasicResponse{
 		Message: "",
 		Ok:      true,
+	})
+}
+
+func (s *StackController) FakeImport(c *gin.Context) {
+
+	composeFile, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, forms.BasicResponse{
+			Message: err.Error(),
+			Ok:      false,
+		})
+		return
+	}
+
+	compose := models.Compose{}
+
+	err = yaml.Unmarshal(composeFile, &compose)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, forms.BasicResponse{
+			Message: err.Error(),
+			Ok:      false,
+		})
+		return
+	}
+
+	stack, err := utils.ConvertToStack(compose)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, forms.BasicResponse{
+			Message: err.Error(),
+			Ok:      false,
+		})
+		return
+	}
+
+	stack.Name = c.Query("name")
+	stack.Description = c.Query("descr")
+	stack.Icon = c.Query("icon")
+
+	c.JSON(http.StatusOK, forms.StackResponse{
+		Message: "",
+		Ok:      true,
+		Stack:   stack,
 	})
 }
